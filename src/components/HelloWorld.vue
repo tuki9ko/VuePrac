@@ -2,15 +2,14 @@
   <div>
     {{ msg }}
     <form>
-      <button>ADD TASK</button>
+      <button type="button" @click="addTodo()">ADD TASK</button>
       <button>FINISHED TASKS</button>
-      <p>input: <input type="text"></p>
-      <p>task:</p>
+      <p>input: <input type="text" v-model="newTodo"></p>
+      <p>task: {{ newTodo }}</p>
     </form>
     <div class="task-list">
-      <label class="task-list__item"><input type="checkbox"><button>EDIT</button></label>
-       <label class="task-list__item" v-for="todo in todos" v-bind:key="todo.text">
-         <input type="checkbox"><button>EDIT</button>{{ todo.text }}
+      <label class="task-list__item" v-for="todo in todos" v-bind:key="todo.id">
+        <input type="checkbox"><button>EDIT</button>{{ todo.text }}
       </label>
     </div>
   </div>
@@ -26,22 +25,42 @@ export default {
     return {
       todos: [
         {
+          id: 0,
           text: 'vue-router',
           done: false
         },
         {
+          id: 1,
           text: 'vuex',
           done: false
         },
         {
+          id: 2,
           text: 'vue-loader',
           done: false
         },
         {
+          id: 3,
           text: 'awesome-vue',
           done: true
         }
-      ]
+      ],
+      newTodo: ""
+    }
+  },
+  methods: {
+    addTodo: function() {
+      let text = this.newTodo && this.newTodo.trim();
+      let newId = Math.max.apply(null, this.todos.map(n => n.id)) + 1;
+      if(!text){
+        return;
+      }
+      this.todos.push({
+        id: newId,
+        text: text,
+        done: false
+      });
+      this.newTodo = '';
     }
   }
 }
