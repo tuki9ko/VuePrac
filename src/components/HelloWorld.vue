@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ msg }}
     <form>
       <button type="button" @click="addTodo()">ADD TASK</button>
       <button type="button" @click="removeTodo()">FINISHED TASKS</button>
@@ -9,7 +8,10 @@
     </form>
     <div class="task-list">
       <label class="task-list__item" v-for="todo in todos" v-bind:key="todo.id">
-        <input type="checkbox" v-model="todo.done"><button>EDIT</button>{{ todo.text }}
+        <input type="checkbox" v-model="todo.done">
+        <input type="checkbox" v-model="todo.editing">
+        <input v-if="todo.editing" v-model="todo.text" @keyup.enter="todo.editing = !todo.editing">
+        <span v-else>{{ todo.text }}</span>
       </label>
     </div>
   </div>
@@ -27,22 +29,26 @@ export default {
         {
           id: 0,
           text: 'vue-router',
-          done: false
+          done: false,
+          editing: false
         },
         {
           id: 1,
           text: 'vuex',
-          done: false
+          done: false,
+          editing: false
         },
         {
           id: 2,
           text: 'vue-loader',
-          done: false
+          done: false,
+          editing: false
         },
         {
           id: 3,
           text: 'awesome-vue',
-          done: true
+          done: true,
+          editing: false
         }
       ],
       newTodo: ""
@@ -58,7 +64,8 @@ export default {
       this.todos.push({
         id: newId,
         text: text,
-        done: false
+        done: false,
+        editing: false
       });
       this.newTodo = '';
     },
